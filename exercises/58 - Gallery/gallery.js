@@ -1,91 +1,91 @@
 function Gallery(gallery) {
   if (!gallery) {
-    throw new Error('No Gallery Found!');
+    console.info('no image gallery 🥵');
+    return;
   }
-  // select the elements we need
   const images = Array.from(gallery.querySelectorAll('img'));
   const modal = document.querySelector('.modal');
-  const prevButton = modal.querySelector('.prev');
-  const nextButton = modal.querySelector('.next');
+  const prevButton = document.querySelector('.prev');
+  const nextButton = document.querySelector('.next');
   let currentImage;
-
-  function openModal() {
-    console.info('Opening Modal...');
-    // First check if the modal is already open
-    if (modal.matches('.open')) {
-      console.info('Madal already open');
-      return; // stop the function from running
-    }
-    modal.classList.add('open');
-
-    // Event listeners to be bound when we open the modal:
-    window.addEventListener('keyup', handleKeyUp);
-    nextButton.addEventListener('click', showNextImage);
-    prevButton.addEventListener('click', showPrevImage);
-  }
-
-  function closeModal() {
-    modal.classList.remove('open');
-    // TODO: add event listeners for clicks and keyboard..
-    window.removeEventListener('keyup', handleKeyUp);
-    nextButton.removeEventListener('click', showNextImage);
-    prevButton.removeEventListener('click', showPrevImage);
-  }
-
-  function handleClickOutside(e) {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  }
-
-  function handleKeyUp(event) {
-    if (event.key === 'Escape') return closeModal();
-    if (event.key === 'ArrowRight') return showNextImage();
-    if (event.key === 'ArrowLeft') return showPrevImage();
-  }
-
-  function showNextImage() {
-    showImage(currentImage.nextElementSibling || gallery.firstElementChild);
-  }
-  function showPrevImage() {
-    showImage(currentImage.previousElementSibling || gallery.lastElementChild);
-  }
-
-  function showImage(el) {
-    if (!el) {
-      console.info('no image to show');
-      return;
-    }
-    // update the modal with this info
-    console.log(el);
-    modal.querySelector('img').src = el.src;
-    modal.querySelector('h2').textContent = el.title;
-    modal.querySelector('figure p').textContent = el.dataset.description;
-    currentImage = el;
-    openModal();
-  }
-
-  // These are our Event Listeners!
-  images.forEach(image =>
-    image.addEventListener('click', e => showImage(e.currentTarget))
-  );
-
-  // loop over each image
-  images.forEach(image => {
-    // attach an event listener for each image
-    image.addEventListener('keyup', e => {
-      // when that is keyup'd, check if it was enter
+  // console.log(images, modal);
+  images.forEach(img => {
+    img.addEventListener('click', e => showImage(e.currentTarget));
+    img.addEventListener('keyup', e => {
       if (e.key === 'Enter') {
-        // if it was, show that image
         showImage(e.currentTarget);
       }
     });
   });
 
-  modal.addEventListener('click', handleClickOutside);
-}
+  function showImage(img) {
+    if (!img) {
+      console.info('No image to show 😑');
+      return;
+    }
+    const imgSrc = img.src;
+    const imgTitle = img.title;
+    const imgDesc = img.dataset.description;
 
-// Use it on the page
+    modal.querySelector('img').src = imgSrc;
+    modal.querySelector('h2').textContent = imgTitle;
+    modal.querySelector('figure p').textContent = imgDesc;
+    currentImage = img;
+    console.log(modal.matches('.open'));
+    openModal();
+    // console.log(imgSrc, imgTitle, imgDesc);
+  }
+
+  function openModal() {
+    if (modal.matches('.open')) {
+      console.info('modal already open');
+      return;
+    }
+    modal.classList.add('open');
+    window.addEventListener('keyup', handleKeypup);
+    modal.addEventListener('click', handleClickOutside);
+    nextButton.addEventListener('click', showNextImage);
+    prevButton.addEventListener('click', showPrevImage);
+  }
+
+  function handleKeypup(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+    if (e.key === 'ArrowRight') {
+      showNextImage();
+    }
+    if (e.key === 'ArrowLeft') {
+      showPrevImage();
+    }
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    window.removeEventListener('keyup', handleKeypup);
+    modal.removeEventListener('click', handleClickOutside);
+    nextButton.removeEventListener('click', showNextImage);
+    prevButton.removeEventListener('click', showPrevImage);
+  }
+
+  function handleClickOutside(e) {
+    const isOutside = !e.target.closest('.modalInner');
+    if (isOutside) {
+      closeModal();
+      currentImage.focus();
+    }
+  }
+
+  function showNextImage() {
+    showImage(currentImage.nextElementSibling || gallery.firstElementChild);
+  }
+
+  function showPrevImage() {
+    showImage(currentImage.previousElementSibling || gallery.lastElementChild);
+  }
+}
 
 const gallery1 = Gallery(document.querySelector('.gallery1'));
 const gallery2 = Gallery(document.querySelector('.gallery2'));
+
+// console.log(gallery1, gallery2);
