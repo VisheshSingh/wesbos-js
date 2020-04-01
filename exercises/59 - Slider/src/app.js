@@ -52,6 +52,15 @@ function Slider(slider) {
 
   prevBtn.addEventListener('click', () => move('back'));
   nextBtn.addEventListener('click', move);
+  function handleKeyup(e) {
+    if (e.key === 'ArrowRight') {
+      move();
+    }
+    if (e.key === 'ArrowLeft') {
+      move('back');
+    }
+  }
+  slider.addEventListener('keyup', handleKeyup);
 }
 
 const slider1 = Slider(document.querySelector('.slider'));
