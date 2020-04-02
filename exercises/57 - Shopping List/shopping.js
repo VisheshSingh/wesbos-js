@@ -6,6 +6,7 @@ const items = [];
 function handleFormSubmit(e) {
   e.preventDefault();
   const name = e.currentTarget.item.value;
+  if (!name) return;
   const item = {
     name,
     id: Date.now(),
@@ -14,7 +15,8 @@ function handleFormSubmit(e) {
 
   items.push(item);
   shoppingList.reset();
-  displayItems();
+  // displayItems();
+  list.dispatchEvent(new CustomEvent('itemsUpdated'));
 }
 
 function displayItems() {
@@ -23,7 +25,7 @@ function displayItems() {
       item => `<li class="shopping-item">
                 <input type="checkbox"/>
                 <span class="itemName">${item.name}</span>
-                <button>&times;</button>
+                <button aria-label="Remove ${item.name}">&times;</button>
             </li>`
     )
     .join('');
@@ -31,3 +33,4 @@ function displayItems() {
 }
 
 shoppingList.addEventListener('submit', handleFormSubmit);
+list.addEventListener('itemsUpdated', displayItems);
