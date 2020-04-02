@@ -34,11 +34,15 @@ body {
   border-bottom: 1px solid var(--gray);
 }
 
-.shopping-item input[type="checkbox"] {
+.shopping input {
+  line-height: 1;
+}
+
+.shopping-item input[type='checkbox'] {
   margin-right: 1rem;
 }
 
-.shopping-item input[type="checkbox"]:checked + .itemName {
+.shopping-item input[type='checkbox']:checked + .itemName {
   opacity: 0.5;
 }
 
