@@ -23,7 +23,9 @@ function displayItems() {
   const html = items
     .map(
       item => `<li class="shopping-item">
-                <input type="checkbox"/>
+                <input type="checkbox"  id="${item.id}" ${
+        item.complete ? 'checked' : ''
+      }/>
                 <span class="itemName">${item.name}</span>
                 <button aria-label="Remove ${item.name}" id="${
         item.id
@@ -51,12 +53,24 @@ function deleteItem(id) {
   list.dispatchEvent(new CustomEvent('itemsUpdated'));
 }
 
+function checkItem(id) {
+  const itemRef = items.find(item => item.id === id);
+  console.log(itemRef);
+  itemRef.complete = !itemRef.complete;
+  list.dispatchEvent(new CustomEvent('itemsUpdated'));
+}
+
 shoppingList.addEventListener('submit', handleFormSubmit);
 list.addEventListener('itemsUpdated', displayItems);
 list.addEventListener('itemsUpdated', mirrorLocalStorage);
 list.addEventListener('click', e => {
+  const id = parseInt(e.target.id);
+  console.log(id);
   if (e.target.matches('button')) {
-    deleteItem(parseInt(e.target.id));
+    deleteItem(id);
+  }
+  if (e.target.matches('input[type="checkbox"]')) {
+    checkItem(id);
   }
 });
 restoreLocalStorage();
