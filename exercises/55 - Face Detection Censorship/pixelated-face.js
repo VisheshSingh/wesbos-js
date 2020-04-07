@@ -5,4 +5,13 @@ const faceCanvas = document.querySelector('.face');
 const faceCtx = canvas.getContext('2d');
 
 const faceDetector = new FaceDetector();
-console.log(video, canvas, faceCanvas, faceDetector);
+// console.log(video, canvas, faceCanvas, faceDetector);
+
+async function populateVideo() {
+  const streamVideo = await navigator.mediaDevices.getUserMedia({
+    video: true,
+  });
+  console.log(streamVideo);
+}
+
+populateVideo();
