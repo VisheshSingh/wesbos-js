@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 const faceCanvas = document.querySelector('.face');
 const faceCtx = faceCanvas.getContext('2d');
 const SIZE = 10;
+const SCALE = 1.5;
 const faceDetector = new FaceDetector();
 // console.log(video, canvas, faceCanvas, faceDetector);
 
@@ -55,6 +56,8 @@ function censor({ boundingBox: face }) {
   );
 
   // draw the small face back on but scale it up
+  const width = face.width * 1.5;
+  const height = face.width * 1.5;
   faceCtx.drawImage(
     // 5 source args
     video, // where does the face come from ?
@@ -63,10 +66,10 @@ function censor({ boundingBox: face }) {
     SIZE,
     SIZE,
     // 4 draw args
-    face.x, // where should we start drawing x and y
-    face.y,
-    face.width,
-    face.height
+    face.x - (width - face.width) / 2, // where should we start drawing x and y
+    face.y - (height - face.height) / 2,
+    width,
+    height
   );
 }
 populateVideo().then(detect);
