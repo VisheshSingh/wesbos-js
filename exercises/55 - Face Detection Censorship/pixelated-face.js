@@ -9,9 +9,10 @@ const faceDetector = new FaceDetector();
 
 async function populateVideo() {
   const streamVideo = await navigator.mediaDevices.getUserMedia({
-    video: true,
+    video: { width: 1280, height: 720 },
   });
-  console.log(streamVideo);
+  video.srcObject = streamVideo;
+  await video.play();
 }
 
 populateVideo();
